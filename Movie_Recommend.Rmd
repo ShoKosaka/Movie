@@ -1,0 +1,492 @@
+---
+title: "Movie_Recommend"
+author: "Sho Kosaka"
+date: "11/15/2017"
+output: html_document
+---
+
+```{r}
+#必要なライブラリをインポート
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(ggrepel)
+library(ForImp)
+library(factoextra)
+
+setwd("~/Desktop/DataAnalysis/Movie") 
+
+#レビューデータを読み込み
+df0 <- read.csv("movie_review0.csv", fileEncoding = "UTF-16", sep = "\t")
+df1 <- read.csv("movie_review1.csv", fileEncoding = "UTF-16", sep = "\t")
+df2 <- read.csv("movie_review2.csv", fileEncoding = "UTF-16", sep = "\t")
+df3 <- read.csv("movie_review3.csv", fileEncoding = "UTF-16", sep = "\t")
+df4 <- read.csv("movie_review4.csv", fileEncoding = "UTF-16", sep = "\t")
+df5 <- read.csv("movie_review5.csv", fileEncoding = "UTF-16", sep = "\t")
+df6 <- read.csv("movie_review6.csv", fileEncoding = "UTF-16", sep = "\t")
+df7 <- read.csv("movie_review7.csv", fileEncoding = "UTF-16", sep = "\t")
+df8 <- read.csv("movie_review8.csv", fileEncoding = "UTF-16", sep = "\t")
+df9 <- read.csv("movie_review9.csv", fileEncoding = "UTF-16", sep = "\t")
+df10 <- read.csv("movie_review10.csv", fileEncoding = "UTF-16", sep = "\t")
+df11 <- read.csv("movie_review11.csv", fileEncoding = "UTF-16", sep = "\t")
+df12 <- read.csv("movie_review12.csv", fileEncoding = "UTF-16", sep = "\t")
+df13 <- read.csv("movie_review13.csv", fileEncoding = "UTF-16", sep = "\t")
+df14 <- read.csv("movie_review14.csv", fileEncoding = "UTF-16", sep = "\t")
+df15 <- read.csv("movie_review15.csv", fileEncoding = "UTF-16", sep = "\t")
+df16 <- read.csv("movie_review16.csv", fileEncoding = "UTF-16", sep = "\t")
+df17 <- read.csv("movie_review17.csv", fileEncoding = "UTF-16", sep = "\t")
+df18 <- read.csv("movie_review18.csv", fileEncoding = "UTF-16", sep = "\t")
+df19 <- read.csv("movie_review19.csv", fileEncoding = "UTF-16", sep = "\t")
+df20 <- read.csv("movie_review20.csv", fileEncoding = "UTF-16", sep = "\t")
+df21 <- read.csv("movie_review21.csv", fileEncoding = "UTF-16", sep = "\t")
+df22 <- read.csv("movie_review22.csv", fileEncoding = "UTF-16", sep = "\t")
+df23 <- read.csv("movie_review23.csv", fileEncoding = "UTF-16", sep = "\t")
+df24 <- read.csv("movie_review24.csv", fileEncoding = "UTF-16", sep = "\t")
+df25 <- read.csv("movie_review25.csv", fileEncoding = "UTF-16", sep = "\t")
+df26 <- read.csv("movie_review26.csv", fileEncoding = "UTF-16", sep = "\t")
+df27 <- read.csv("movie_review27.csv", fileEncoding = "UTF-16", sep = "\t")
+df28 <- read.csv("movie_review28.csv", fileEncoding = "UTF-16", sep = "\t")
+df29 <- read.csv("movie_review29.csv", fileEncoding = "UTF-16", sep = "\t")
+df30 <- read.csv("movie_review30.csv", fileEncoding = "UTF-16", sep = "\t")
+df31 <- read.csv("movie_review31.csv", fileEncoding = "UTF-16", sep = "\t")
+df32 <- read.csv("movie_review32.csv", fileEncoding = "UTF-16", sep = "\t")
+df33 <- read.csv("movie_review33.csv", fileEncoding = "UTF-16", sep = "\t")
+df34 <- read.csv("movie_review34.csv", fileEncoding = "UTF-16", sep = "\t")
+df35 <- read.csv("movie_review35.csv", fileEncoding = "UTF-16", sep = "\t")
+df36 <- read.csv("movie_review36.csv", fileEncoding = "UTF-16", sep = "\t")
+df37 <- read.csv("movie_review37.csv", fileEncoding = "UTF-16", sep = "\t")
+df38 <- read.csv("movie_review38.csv", fileEncoding = "UTF-16", sep = "\t")
+df39 <- read.csv("movie_review39.csv", fileEncoding = "UTF-16", sep = "\t")
+df40 <- read.csv("movie_review40.csv", fileEncoding = "UTF-16", sep = "\t")
+df41 <- read.csv("movie_review41.csv", fileEncoding = "UTF-16", sep = "\t")
+df42 <- read.csv("movie_review42.csv", fileEncoding = "UTF-16", sep = "\t")
+df43 <- read.csv("movie_review43.csv", fileEncoding = "UTF-16", sep = "\t")
+df44 <- read.csv("movie_review44.csv", fileEncoding = "UTF-16", sep = "\t")
+df45 <- read.csv("movie_review45.csv", fileEncoding = "UTF-16", sep = "\t")
+df46 <- read.csv("movie_review46.csv", fileEncoding = "UTF-16", sep = "\t")
+df47 <- read.csv("movie_review47.csv", fileEncoding = "UTF-16", sep = "\t")
+df48 <- read.csv("movie_review48.csv", fileEncoding = "UTF-16", sep = "\t")
+df49 <- read.csv("movie_review49.csv", fileEncoding = "UTF-16", sep = "\t")
+df50 <- read.csv("movie_review50.csv", fileEncoding = "UTF-16", sep = "\t")
+df51 <- read.csv("movie_review51.csv", fileEncoding = "UTF-16", sep = "\t")
+df52 <- read.csv("movie_review52.csv", fileEncoding = "UTF-16", sep = "\t")
+df53 <- read.csv("movie_review53.csv", fileEncoding = "UTF-16", sep = "\t")
+df54 <- read.csv("movie_review54.csv", fileEncoding = "UTF-16", sep = "\t")
+df55 <- read.csv("movie_review55.csv", fileEncoding = "UTF-16", sep = "\t")
+df56 <- read.csv("movie_review56.csv", fileEncoding = "UTF-16", sep = "\t")
+df57 <- read.csv("movie_review57.csv", fileEncoding = "UTF-16", sep = "\t")
+
+
+df <- rbind(df0,df1,df2,df3,df4,df5,df6,df7,df8,df9,
+            df10,df11,df12,df13,df14,df15,df16,df17,df18,df19,
+            df20,df21,df22,df23,df24,df25,df26,df27,df28,df29,
+            df30,df31,df32,df33,df34,df35,df36,df37,df38,df39,
+            df40,df41,df42,df43,df44,df45,df46,df47,df48,df49,
+            df50,df51,df52,df53,df54,df55,df56,df57)
+
+df_reshape <- reshape(df[,c(2,3,4)], idvar="ID2", timevar = "Title", direction = "wide") #データを水平展開形式に変換
+names(df_reshape) <- str_replace(names(df_reshape), "Point.", "") #カラム名修正
+rownames(df_reshape) <- c(1:nrow(df_reshape)) #index列を振り直し
+
+df_er <-read.csv("movie_reviewer.csv", fileEncoding = "UTF-16", sep = "\t") #レビュアーデータを読み込み
+df_er <- df_er[,-1] #不要列削除
+
+#年齢離散化
+df_er$AgeRange <- cut(df_er$Age , breaks=c(0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100,105,110))
+df_er$AgeRange <- factor(df_er$AgeRange,labels=c(
+  "11-15","16-20","21-25","26-30","31-35","36-40","41-45","46-50","51-55","56-60",
+  "61-65","66-70","71-75","101-105"))
+```
+
+
+```{r}
+df_er_1 <- df_er %>%
+  select(Gender, AgeRange) %>%
+  group_by(Gender, AgeRange) %>%
+  filter(Gender == "男性" | Gender == "女性")　%>%
+  filter(!is.na(AgeRange)) %>%
+  filter(AgeRange != "101-105") %>%
+  tally() %>%
+  arrange((n))
+
+ggplot(df_er_1,aes(AgeRange, n, fill = Gender)) +
+  geom_bar(stat="identity")+
+  ggtitle("性別・年齢別　レビュアー数分布")+xlab("年齢")+ylab("レビュアー数")+ 
+  theme(axis.text.x = element_text(angle = 45, hjust =1))+
+  theme_bw(base_family = "HiraKakuProN-W3") +
+  scale_y_continuous(labels = scales::comma) +
+  labs(fill = "")
+```
+
+
+```{r}
+#データ取得完了後にやる
+df_1 <- df %>%
+  select(ID2, Point) %>%
+  group_by(ID2) %>%
+  summarise(Point_mean = mean(Point, na.rm = TRUE))
+
+df_merge <- merge(df_1, df_er, by.x = "ID2", by.y = "ID1")
+
+df_merge_1 <- df_merge %>%
+  filter(nReview > 9) %>%
+  select(Gender, AgeRange, Point_mean) %>%
+  filter(Gender == "男性" | Gender == "女性")　%>%
+  filter(!is.na(AgeRange)) %>%
+  filter(AgeRange == "26-30" | AgeRange == "31-35" | AgeRange == "36-40" |
+           AgeRange == "41-45" | AgeRange == "46-50" | AgeRange == "51-55")
+
+ggplot(df_merge_1,aes(x = AgeRange, y = Point_mean, color = Gender)) +
+  geom_boxplot() +
+  ggtitle("性別・年齢別　レビュー平均点　（レビュー数10以上　26-55歳）")+xlab("年齢")+ylab("レビュー平均点")+ 
+  theme(axis.text.x = element_text(angle = 45, hjust =1))+
+  theme_bw(base_family = "HiraKakuProN-W3") +
+  labs(color = "")
+```
+
+
+```{r}
+df_mean <- df %>%
+  group_by(Title) %>%
+  summarise(Mean = mean(Point, na.rm = TRUE), Std = sd(Point, na.rm = TRUE))
+
+df_count <- df %>%
+  group_by(Title) %>%
+  count()
+
+df_mean1 <- cbind(df_mean, df_count[,-1]) #Title列の重複を避けるため
+
+ggplot(df_mean1,aes(Std, Mean)) +
+  geom_point()+
+  ggtitle("レビュー評価点プロット　平均点 vs バラツキ（std）")+xlab("バラツキ（std）")+ylab("平均点")+ 
+  theme(axis.text.x = element_text(angle = 180, hjust =1))+
+  scale_y_continuous(breaks=seq(0,10,1)) +
+  theme_bw(base_family = "HiraKakuProN-W3")
+```
+
+
+```{r}
+df_mean_20 <- df_mean1 %>%
+  filter(n > 29) %>%
+  arrange(desc(Mean)) %>%
+  head(20)
+
+ggplot(df_mean_20,aes(Std, Mean)) +
+  geom_point()+
+  ggtitle("平均点 vs バラツキ（std） （平均点TOP20　レビュー数30以上）")+xlab("バラツキ（std）")+ylab("平均点")+ 
+  theme(axis.text.x = element_text(angle = 180, hjust =1))+
+  geom_text_repel(label = df_mean_20$Title, family = "HiraKakuProN-W3", size = 3) +
+  theme_bw(base_family = "HiraKakuProN-W3") +
+  scale_y_continuous(labels = scales::comma)
+```
+
+
+```{r}
+ggplot(df_mean1,aes(n, Mean)) +
+  geom_point()+
+  ggtitle("レビュー評価点プロット　平均点 vs レビュー数")+xlab("レビュー数")+ylab("平均点")+ 
+  theme(axis.text.x = element_text(angle = 180, hjust =1))+
+  scale_y_continuous(breaks=seq(0,10,1)) +
+  theme_bw(base_family = "HiraKakuProN-W3")
+```
+
+
+
+```{r}
+df_mean_20_1 <- df_mean1 %>%
+  filter(n > 100) %>%
+  filter(Mean < 4) %>%
+  arrange(desc(n)) %>%
+  head(20)
+
+ggplot(df_mean_20_1,aes(n,Mean)) +
+  geom_point() +
+  ggtitle("平均点 vs レビュー数 （平均点4以下　レビュー数100以上）")+xlab("レビュー数")+ylab("平均点")+ 
+  theme(axis.text.x = element_text(angle = 180, hjust =1))+
+  geom_text_repel(label = df_mean_20_1$Title, family = "HiraKakuProN-W3", size = 3) +
+  theme_bw(base_family = "HiraKakuProN-W3") +
+  scale_y_continuous(labels = scales::comma)
+```
+
+
+```{r}
+df_2 <- df %>%
+  select(ID2, Point) %>%
+  group_by(ID2) %>%
+  summarise(Point_mean = mean(Point, na.rm = TRUE), Point_std = sd(Point, na.rm = TRUE))
+
+df_merge_2 <- merge(df_2, df_er, by.x = "ID2", by.y = "ID1")
+
+df_merge_3 <- merge(df_merge_2, df_reshape, by.x = "ID2", by.y = "ID2" )
+
+df_merge_3 <- df_merge_3 %>%
+  filter(nReview >= 10) %>%
+  filter(Point_std > 0.1) #Stdが0を除去
+```
+
+
+```{r}
+#正規化前
+df_reshape_mean <- df_merge_3[,-c(1:9)] #不要列を除く
+df_reshape_mean <- t(df_reshape_mean) #転置
+df_reshape_mean <- meanimp(df_reshape_mean) #NAを平均で置換
+df_reshape_norm <- scale(df_reshape_mean) #正規化
+df_reshape_mean <- t(df_reshape_mean) #再度転置
+df_reshape_mean <- cbind(df_reshape_mt10[,"ID1"], df_reshape_mean) #IDを戻す
+colnames(df_reshape_mean)[1] <- "ID2"
+df_reshape_mean <- as.data.frame(df_reshape_mean)
+
+#正規化後
+mx_reshape_norm <- t(df_reshape_norm)
+df_reshape_norm <- cbind(df_merge_3[,"ID2"], mx_reshape_norm) #IDを戻す
+colnames(df_reshape_norm)[1] <- "ID2"
+df_reshape_norm <- as.data.frame(df_reshape_norm)
+```
+
+
+```{r}
+df_3 <- df %>%
+  select(ID2, Point) %>%
+  filter(ID2 == "20001" | ID2 == "20625") #いいIDは後で探す
+
+df_3$ID2 <- as.factor(df_3$ID2)
+
+ggplot(df_3,aes(Point, fill = ID2)) +
+  geom_density(alpha = 0.5, size = 0) +
+  ggtitle("レビュアー別　レビュー評価点分布比較")+xlab("レビュー評価点")+ylab("確率密度")+ 
+  theme(axis.text.x = element_text(angle = 45, hjust =1))+
+  scale_x_continuous(breaks=seq(0,10,1)) +
+  theme_bw(base_family = "HiraKakuProN-W3") +
+  scale_fill_hue(name = "", labels = c("レビュアー 1", "レビュアー 2"))
+```
+
+```{r}
+#自分の評価点をつけるためのフォーマット用意
+df_reshape_my_pref <- df_reshape[1,c(2:16000)]
+readr::write_excel_csv(df_reshape_my_pref, "my_preference1.csv")
+```
+
+```{r}
+#Excel上で自分の評価点をつける
+#1行目のラストにEnter
+#UTF-8で保存
+my_pref <- read.csv("my_preference.csv", fileEncoding = "UTF-8", sep = ",")
+
+# my_prefとdf_reshapeの長さ合わせ（ただし、ID列だけ少ない）
+my_pref <- cbind(my_pref, df_reshape[1,c(16001:ncol(df_reshape))])
+
+my_pref <- t(my_pref) #転置
+#my_pref_mean <- meanimp(my_pref) #NAを平均で置換
+#my_pref_norm <- scale(my_pref_mean) #正規化
+#my_pref_norm <- t(my_pref_norm) #再度転置
+
+my_pref <- as.data.frame(my_pref)
+my_pref$title <- rownames(my_pref)
+readr::write_excel_csv(my_pref, "my_pref_t.csv")
+```
+
+
+
+```{r}
+colnames(my_pref)[1] <- "Point"
+
+my_pref <- as.data.frame(my_pref)
+
+my_pref_dist <- my_pref %>%
+  filter(!is.na(Point))
+
+ggplot(my_pref_dist,aes(Point)) +
+  geom_density(fill = "green", size = 0, alpha = 0.5) +
+  ggtitle("自分のレビュー評価点分布")+xlab("レビュー評価点")+ylab("確率密度")+ 
+  theme(axis.text.x = element_text(angle = 45, hjust =1))+
+  scale_x_continuous(breaks=seq(0,10,1)) +
+  theme_bw(base_family = "HiraKakuProN-W3")
+```
+
+
+
+```{r}
+#今回使わない
+df_hclust <- hclust(dist(df_reshape_norm), method = "ward.D2")
+df_hclust
+plot(df_hclust, hang = -1)
+
+df_km <- kmeans(df_reshape_norm[,-1],10) #全て同じ評価点のユーザーを除外
+summary(df_km)
+table(df_km$cluster)
+
+library(cluster)
+plot(pam(df_reshape_norm[,-1],10),ask=TRUE)
+
+library(mclust)
+plot(mclustBIC(df_reshape_norm[,-1]))
+
+fviz_cluster(df_hb1, frame.type = "norm", frame.level = 0.68, repel = TRUE)
+```
+
+```{r}
+# my_preferenceを全体データに加える
+colnames(my_pref_norm) <- colnames(df_reshape_norm[,-1])
+rownames(my_pref_norm)[1] <- "my_pref"
+df_reshape_norm_pref <- rbind(my_pref_norm, df_reshape_norm[,-1])
+```
+
+
+```{r}
+#https://www.r-bloggers.com/hybrid-hierarchical-k-means-clustering-for-optimizing-clustering-outputs-unsupervised-machine-learning/を参照
+
+nCluster <- 50 #クラスター数を指定
+
+df_hb <- eclust(df_reshape_norm_pref, "hclust", k=nCluster, method = "ward.D2", graph = FALSE) #まずは階層クラスタリング
+grp <- df_hb$cluster
+clus.centers <- aggregate(df_reshape_norm_pref, list(grp), mean) #階層クラスタリングによる中心値を求める
+clus.centers <- clus.centers[,-1] #不要列削除
+fviz_dend(df_hb, rect = TRUE, show_labels = TRUE, cex = 0.5)
+```
+```{r}
+table(df_hb$cluster)
+```
+
+
+
+```{r}
+#　Kmeansの初期値に階層クラスタリングの中心値を利用
+df_hb1 <- eclust(df_reshape_norm_pref, "kmeans", k = clus.centers, graph = FALSE)
+fviz_silhouette(df_hb1) + ylim(0,0.1)
+```
+
+
+```{r}
+#自分がどのクラスタに属したか確認
+df_reshape_cl <- cbind(df_hb1$cluster, df_reshape_norm_pref)
+
+table(df_hb1$cluster)
+head(df_reshape_cl)
+```
+
+
+```{r}
+A <- matrix(c(8,10,7,6,9,5,6,6,10,4,4,6),3,4, byrow = FALSE)
+A
+B <- t(scale(t(A)))
+
+C <- B %*% t(B)
+C
+D <- B %*% t(B) %*% B
+D
+
+nCluster <- 2 #クラスター数を指定
+
+test <- eclust(B, "hclust", k = 2, method = "ward.D2", graph = FALSE)
+group_test <- test$cluster
+centers_test <- aggregate(B, list(group_test), mean)
+centers_test <- centers_test[,-1]
+km_test <- eclust(B, "kmeans", k = centers_test, graph = FALSE)
+km_test$centers
+
+test <- eclust(B, "hclust", k=nCluster, method = "ward.D2", graph = FALSE) #まずは階層クラスタリング
+grp_test <- test$cluster
+test_centers <- aggregate(B, list(grp_test), mean) #階層クラスタリングによる中心値を求める
+test_centers <- test.centers[,-1] #不要列削除
+fviz_dend(test, rect = TRUE, show_labels = TRUE, cex = 0.5)
+
+test_km <- eclust(B, "kmeans", k = test_centers, graph = FALSE)
+fviz_silhouette(df_hb1) + ylim(0,0.1)
+```
+
+```{r}
+hb_centers <- round(df_hb1$centers,2)
+
+hb_centers <- as.data.frame(t(hb_centers))
+
+hb_centers$mean <- rowMeans(hb_centers)
+hb_centers$title <- rownames(hb_centers)
+rownames(hb_centers) <- c(1:nrow(hb_centers))
+
+hb_centers_sort <- hb_centers[order(-hb_centers$mean),]
+rownames(hb_centers_sort) <- c(1:nrow(hb_centers_sort))
+hb_centers_exclude <- hb_centers_sort #[-c(1:10),] #上位を除去
+
+#ベースのデータフレームを第一グループから作る
+hb_centers_rank <- hb_centers_exclude[,c(1,nCluster+2)]
+hb_centers_rank <- hb_centers_rank[order(-hb_centers_rank[,1]),]
+colnames(hb_centers_rank)[2] <- 1
+hb_centers_rank[,1] <- rownames(hb_centers_rank)
+
+#第二グループ以降、ベースに加える
+for (i in 2:nCluster) {
+  hb_centers_i <- hb_centers_exclude[,c(i,nCluster+2)]
+  hb_centers_i_sort <- hb_centers_i[order(-hb_centers_i[,1]),]
+  colnames(hb_centers_i_sort)[2] <- i
+  hb_centers_i_sort[,1] <- rownames(hb_centers_i_sort)
+  hb_centers_rank <- cbind(hb_centers_rank,hb_centers_i_sort)
+}
+
+rownames(hb_centers_rank) <- c(1:nrow(hb_centers_rank))
+```
+
+```{r}
+#自分
+hb_centers_rank_50_21 <- hb_centers_rank[,c(1,41,42)]
+hb_centers_rank_50_21[,1] <- c(1:nrow(hb_centers_rank_50_21))
+colnames(hb_centers_rank_50_21)[1] <- "クラスタ内ランキング"
+colnames(hb_centers_rank_50_21)[2] <- "総合ランキング"
+colnames(hb_centers_rank_50_21)[3] <- "タイトル"
+
+readr::write_excel_csv(hb_centers_rank_50_21, "hb_centers_rank_50_21.csv")
+```
+
+```{r}
+#80年代大好き
+hb_centers_rank_50_3 <- hb_centers_rank[,c(1,5,6)]
+hb_centers_rank_50_3[,1] <- c(1:nrow(hb_centers_rank_50_3))
+colnames(hb_centers_rank_50_3)[1] <- "クラスタ内ランキング"
+colnames(hb_centers_rank_50_3)[2] <- "総合ランキング"
+colnames(hb_centers_rank_50_3)[3] <- "タイトル"
+
+readr::write_excel_csv(hb_centers_rank_50_3, "hb_centers_rank_50_3.csv")
+```
+
+```{r}
+#ヒューマンドラマ大好き
+hb_centers_rank_50_44 <- hb_centers_rank[,c(1,87,88)]
+hb_centers_rank_50_44[,1] <- c(1:nrow(hb_centers_rank_50_44))
+colnames(hb_centers_rank_50_44)[1] <- "クラスタ内ランキング"
+colnames(hb_centers_rank_50_44)[2] <- "総合ランキング"
+colnames(hb_centers_rank_50_44)[3] <- "タイトル"
+
+readr::write_excel_csv(hb_centers_rank_50_44, "hb_centers_rank_50_44.csv")
+```
+
+```{r}
+#ゴッドファーザー
+hb_centers_rank_50_34 <- hb_centers_rank[,c(1,67,68)]
+hb_centers_rank_50_34[,1] <- c(1:nrow(hb_centers_rank_50_34))
+colnames(hb_centers_rank_50_34)[1] <- "クラスタ内ランキング"
+colnames(hb_centers_rank_50_34)[2] <- "総合ランキング"
+colnames(hb_centers_rank_50_34)[3] <- "タイトル"
+
+readr::write_excel_csv(hb_centers_rank_50_34, "hb_centers_rank_50_34.csv")
+```
+
+```{r}
+#ロードオブザリング
+hb_centers_rank_50_32 <- hb_centers_rank[,c(1,63,64)]
+hb_centers_rank_50_32[,1] <- c(1:nrow(hb_centers_rank_50_32))
+colnames(hb_centers_rank_50_32)[1] <- "クラスタ内ランキング"
+colnames(hb_centers_rank_50_32)[2] <- "総合ランキング"
+colnames(hb_centers_rank_50_32)[3] <- "タイトル"
+
+readr::write_excel_csv(hb_centers_rank_50_32, "hb_centers_rank_50_32.csv")
+```
+
+```{r}
+#生きるダイハード
+hb_centers_rank_50_23 <- hb_centers_rank[,c(1,45,46)]
+hb_centers_rank_50_23[,1] <- c(1:nrow(hb_centers_rank_50_23))
+colnames(hb_centers_rank_50_23)[1] <- "クラスタ内ランキング"
+colnames(hb_centers_rank_50_23)[2] <- "総合ランキング"
+colnames(hb_centers_rank_50_23)[3] <- "タイトル"
+
+readr::write_excel_csv(hb_centers_rank_50_23, "hb_centers_rank_50_23.csv")
+```
